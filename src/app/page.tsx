@@ -1,6 +1,7 @@
 import Footer from "@/components/Base/Footer";
 import Header from "@/components/Base/Header";
 import Toolbar from "@/components/Base/Toolbar/Toolbar";
+import TiptapEditor from "@/components/Document/TiptapEditor";
 
 export default function Home() {
   return (
@@ -8,6 +9,7 @@ export default function Home() {
       <Header />
       <main className="">
         <Toolbar />
+        <TiptapEditor />
       </main>
       <Footer />
     </div>
