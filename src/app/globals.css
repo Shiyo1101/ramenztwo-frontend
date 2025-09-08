@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/style/noDescendingSpecificity: for tiptap css */
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -118,5 +119,34 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+.tiptap {
+  /* List styles */
+  ul,
+  ol {
+    padding: 0 1rem;
+    margin: 1.25rem 1rem 1.25rem 0.4rem;
+  }
+
+  ul,
+  li {
+    list-style: disc;
+
+    p {
+      margin-top: 0.25rem;
+      margin-bottom: 0.25rem;
+    }
+  }
+
+  ol,
+  li {
+    list-style: decimal;
+
+    p {
+      margin-top: 0.25rem;
+      margin-bottom: 0.25rem;
+    }
   }
 }
