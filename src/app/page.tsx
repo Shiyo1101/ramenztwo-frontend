@@ -4,7 +4,7 @@ import Toolbar from "@/components/Base/Toolbar/Toolbar";
 
 export default function Home() {
   return (
-    <div className="w-full min-h-screen flex flex-col gap-4 px-10 py-5">
+    <div className="flex min-h-screen w-full flex-col gap-4 px-10 py-5">
       <Header />
       <main className="">
         <Toolbar />

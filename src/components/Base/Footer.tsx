@@ -4,7 +4,7 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="text-center mt-auto">
+    <footer className="mt-auto text-center">
       <small>
         &copy; <span id="year">{currentYear}</span> Press Polish
       </small>

@@ -2,7 +2,7 @@
 
 export default function Toolbar() {
   return (
-    <div className="w-full bg-gray-100 border-b flex items-center px-2 h-12 gap-2 rounded-md">
+    <div className="flex h-12 w-full items-center gap-2 rounded-md border-b bg-gray-100 px-2">
       ツールバー
     </div>
   );

@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function Header() {
   return (
-    <header className={`w-full flex justify-between items-center`}>
+    <header className={`flex w-full items-center justify-between`}>
       <Link href="/">
         <Image
           src="/app-logo/vector/black-logo.svg"
@@ -16,7 +16,7 @@ export default function Header() {
         />
       </Link>
       <div>
-        <Link className="hover:underline font-semibold" href="/">
+        <Link className="font-semibold hover:underline" href="/">
           ホーム
         </Link>
       </div>
