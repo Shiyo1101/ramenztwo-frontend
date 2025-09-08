@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "biome check",
     "format": "biome format --write",
-    "format:unsafe": "biome format --write --unsafe"
+    "format:unsafe": "biome lint --write --unsafe ./src"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.3",
