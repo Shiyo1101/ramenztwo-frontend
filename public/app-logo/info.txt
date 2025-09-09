@@ -1,0 +1,14 @@
+
+Hope you enjoy your new logo, here are the people that
+made your beautiful logo happen :)
+font name: Jomhuria-Regular
+font link: https://fonts.google.com/specimen/Jomhuria
+font author: KB Studio
+font author site: http://tarobish.github.io/Jomhuria/
+
+
+icon designer: Karthick Nagarajan
+icon designer link: /creator/karthicknagarajanps/
+        
+{"bg":"#106989","icon":"#E5D5E4","font":"#E5D5E4","slogan":"#f9e9f8"}
+      
