@@ -3,12 +3,23 @@
 import type { Editor } from "@tiptap/react";
 import { Check, Redo2, Undo2 } from "lucide-react";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Toggle } from "@/components/ui/toggle";
 
 type ToolbarProps = {
@@ -19,6 +30,10 @@ export default function Toolbar({ editor }: ToolbarProps) {
   const [isBold, setIsBold] = useState(editor?.isActive("bold"));
   const [isOrdered, setIsOrdered] = useState(editor?.isActive("orderedList"));
   const [isBullet, setIsBullet] = useState(editor?.isActive("bulletList"));
+  const [isUploadOpen, setIsUploadOpen] = useState(false);
+  const [isDownloadOpen, setIsDownloadOpen] = useState(false);
+  const [_title, setTitle] = useState("");
+  const [_file, setFile] = useState<File | null>(null);
 
   if (!editor) return null;
 
@@ -53,8 +68,79 @@ export default function Toolbar({ editor }: ToolbarProps) {
     }
   };
 
+  const handleTitleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+    console.log(e.target.value);
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setFile(e.target.files[0]);
+      console.log(e.target.files[0]);
+    }
+  };
+
   return (
     <div className="flex h-12 w-full items-center gap-2 rounded border-b bg-gray-100 px-2">
+      {/* ファイルを扱う */}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <button type="button" className="rounded px-3 py-1 border hover:bg-gray-200">
+            ファイル
+          </button>
+        </DropdownMenuTrigger>
+
+        <DropdownMenuContent>
+          <DropdownMenuItem
+            onSelect={() => setIsUploadOpen(true)}
+            className="flex justify-between cursor-pointer"
+          >
+            <span>開く</span>
+          </DropdownMenuItem>
+
+          <DropdownMenuItem
+            onSelect={() => setIsDownloadOpen(true)}
+            className="flex justify-between cursor-pointer"
+          >
+            <span>ダウンロード</span>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      {/* アップロードポップアップ */}
+      <Dialog open={isUploadOpen} onOpenChange={setIsUploadOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>ファイルをアップロードする</DialogTitle>
+            <div className="mt-4 flex flex-col gap-6">
+              <div>
+                <Label htmlFor="title">タイトル名</Label>
+                <Input id="title" type="text" onChange={(e) => handleTitleChange(e)} />
+              </div>
+              <div>
+                <Label htmlFor="markdownfile">マークダウンファイル</Label>
+                <Input id="markdownfile" type="file" onChange={(e) => handleFileChange(e)} />
+              </div>
+            </div>
+          </DialogHeader>
+          <DialogFooter>
+            <Button type="submit" className="mr-auto block">
+              確定
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* ダウンロードポップアップ */}
+      <Dialog open={isDownloadOpen} onOpenChange={setIsDownloadOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>ファイルをダウンロードする</DialogTitle>
+            <DialogDescription>ここにダウンロードボタンを挿入</DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+
       {/* 取り消し */}
       <button
         type="button"
@@ -117,7 +203,7 @@ export default function Toolbar({ editor }: ToolbarProps) {
       {/* 見出し */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button type="button" className="rounded border px-3 py-1 hover:bg-gray-200">
+          <button type="button" className="rounded px-3 py-1 border hover:bg-gray-200">
             {headingOptions.find((o) => o.value === getCurrentHeading())?.label ?? "標準テキスト"}
           </button>
         </DropdownMenuTrigger>
@@ -125,8 +211,8 @@ export default function Toolbar({ editor }: ToolbarProps) {
           {headingOptions.map((o) => (
             <DropdownMenuItem
               key={o.value}
-              onClick={() => setHeading(o.value)}
-              className="flex cursor-pointer justify-between"
+              onSelect={() => setHeading(o.value)}
+              className="flex justify-between cursor-pointer"
             >
               <span style={{ fontSize: o.fontSize }}>{o.label}</span>
               {getCurrentHeading() === o.value && <Check className="h-4 w-4" />}

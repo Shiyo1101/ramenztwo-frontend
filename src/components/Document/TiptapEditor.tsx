@@ -8,7 +8,7 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { Markdown } from "tiptap-markdown";
 
-import Toolbar from "../Base/Toolbar/Toolbar";
+import Toolbar from "../Base/Toolbar";
 
 type TiptapEditorProps = {
   initialContent?: string;

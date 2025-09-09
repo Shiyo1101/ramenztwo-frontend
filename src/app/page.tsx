@@ -1,6 +1,4 @@
 import MarkdownIt from "markdown-it";
-import Footer from "@/components/Base/Footer";
-import Header from "@/components/Base/Header";
 import TiptapEditor from "@/components/Document/TiptapEditor";
 
 export default function Home() {
@@ -130,12 +128,8 @@ FAQ: [https://tayori.com/q/pth-2025summer-faq/](https://tayori.com/q/pth-2025sum
   const htmlContent = md.render(markdownContent);
 
   return (
-    <div className="flex min-h-screen w-full flex-col gap-4 px-10 py-5">
-      <Header />
-      <main>
-        <TiptapEditor initialContent={htmlContent} />
-      </main>
-      <Footer />
-    </div>
+    <main className="">
+      <TiptapEditor initialContent={htmlContent} />
+    </main>
   );
 }
