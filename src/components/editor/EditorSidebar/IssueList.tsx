@@ -1,6 +1,7 @@
 "use client";
 
 import type { Editor } from "@tiptap/react";
+import { Separator } from "@/components/ui/separator";
 import { jumpToPosition } from "@/lib/editor-utils";
 import type {
   MediaHookEvaluation,
@@ -16,35 +17,81 @@ interface IssueListProps {
 }
 
 export default function IssueList({ editor, analysisResponse }: IssueListProps) {
-  const handleMHEClick = (_mediaHookEvaluation: MediaHookEvaluation) => {};
+  const handleMHEClick = (_mediaHookEvaluation: MediaHookEvaluation) => {
+    // メディアフック評価は全体的な評価なので、エディタ内の特定位置にジャンプしない
+  };
+
   const handlePIClick = (paragraphImprovement: ParagraphImprovement) => {
     jumpToPosition(editor, paragraphImprovement.original_text);
   };
 
-  if (analysisResponse?.paragraph_improvements.length === 0) {
+  if (!analysisResponse) {
+    return null;
+  }
+
+  const hasMediaHooks = analysisResponse.media_hook_evaluations?.length > 0;
+  const hasParagraphImprovements = analysisResponse.paragraph_improvements?.length > 0;
+
+  if (!hasMediaHooks && !hasParagraphImprovements) {
     return (
       <div className="flex h-full items-center justify-center text-muted-foreground">
-        <p className="text-sm">指摘事項はありません</p>
+        <p className="text-sm">改善提案はありません</p>
       </div>
     );
   }
 
+  // 優先度でソート（高優先度を上に表示）
+  const sortedParagraphImprovements = [...(analysisResponse.paragraph_improvements || [])].sort(
+    (a, b) => {
+      const priorityOrder = { high: 0, medium: 1, low: 2 };
+      return (
+        (priorityOrder[a.priority as keyof typeof priorityOrder] || 2) -
+        (priorityOrder[b.priority as keyof typeof priorityOrder] || 2)
+      );
+    },
+  );
+
   return (
-    <div className="flex max-h-[80vh] flex-col gap-4 overflow-y-auto p-4">
-      {analysisResponse?.media_hook_evaluations?.map((mediaHookEvaluation) => (
-        <MediaHookEvaluationCard
-          key={mediaHookEvaluation.id}
-          mediaHookEvaluation={mediaHookEvaluation}
-          onClick={() => handleMHEClick(mediaHookEvaluation)}
-        />
-      ))}
-      {analysisResponse?.paragraph_improvements?.map((paragraphImprovement) => (
-        <ParagraphImprovementCard
-          key={paragraphImprovement.paragraph_index}
-          paragraphImprovement={paragraphImprovement}
-          onClick={() => handlePIClick(paragraphImprovement)}
-        />
-      ))}
+    <div className="flex flex-col gap-4 p-4">
+      {hasMediaHooks && (
+        <>
+          <div className="sticky top-0 z-10 bg-background pb-2">
+            <h3 className="font-medium text-muted-foreground text-sm">
+              メディアフック評価（9つの観点）
+            </h3>
+          </div>
+          <div className="grid gap-3">
+            {analysisResponse.media_hook_evaluations?.map((mediaHookEvaluation) => (
+              <MediaHookEvaluationCard
+                key={mediaHookEvaluation.id}
+                mediaHookEvaluation={mediaHookEvaluation}
+                onClick={() => handleMHEClick(mediaHookEvaluation)}
+              />
+            ))}
+          </div>
+        </>
+      )}
+
+      {hasMediaHooks && hasParagraphImprovements && <Separator className="my-2" />}
+
+      {hasParagraphImprovements && (
+        <>
+          <div className="sticky top-0 z-10 bg-background pb-2">
+            <h3 className="font-medium text-muted-foreground text-sm">
+              文章の改善提案（{sortedParagraphImprovements.length}件）
+            </h3>
+          </div>
+          <div className="grid gap-3">
+            {sortedParagraphImprovements.map((paragraphImprovement) => (
+              <ParagraphImprovementCard
+                key={paragraphImprovement.paragraph_index}
+                paragraphImprovement={paragraphImprovement}
+                onClick={() => handlePIClick(paragraphImprovement)}
+              />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }

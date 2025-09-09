@@ -20,7 +20,10 @@ export default function TiptapEditor() {
 
       <div className="bg-background">
         <ResizablePanelGroup direction="horizontal">
-          <ResizablePanel defaultSize={70} minSize={50}>
+          <ResizablePanel
+            defaultSize={analysisResponse ? 70 : 100}
+            minSize={analysisResponse ? 50 : 100}
+          >
             <div className="mx-auto w-[816px] min-w-max justify-center py-4 print:w-full print:min-w-0 print:py-0">
               <div className="max-h-[80vh] overflow-y-auto rounded border bg-white">
                 <EditorContent editor={editor} />
@@ -28,12 +31,13 @@ export default function TiptapEditor() {
             </div>
           </ResizablePanel>
 
-          <ResizableHandle withHandle />
-
-          {analysisResponse?.paragraph_improvements.length !== 0 && (
-            <ResizablePanel defaultSize={30} minSize={25}>
-              <EditorSidebar editor={editor} analysisResponse={analysisResponse} />
-            </ResizablePanel>
+          {analysisResponse && (
+            <>
+              <ResizableHandle withHandle />
+              <ResizablePanel defaultSize={30} minSize={25} maxSize={50}>
+                <EditorSidebar editor={editor} analysisResponse={analysisResponse} />
+              </ResizablePanel>
+            </>
           )}
         </ResizablePanelGroup>
       </div>
