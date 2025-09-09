@@ -1,7 +1,7 @@
 "use client";
 
 import type { Editor } from "@tiptap/react";
-import type { AnalysisResponse } from "@/types/editor";
+import type { PressReleaseAnalysisResponse } from "@/types/api";
 import AnalyzeButton from "./AnalyzeButton";
 import FileOperations from "./FileOperations";
 import HeadingSelector from "./HeadingSelector";
@@ -9,7 +9,7 @@ import TextFormatting from "./TextFormatting";
 
 interface EditorToolbarProps {
   editor: Editor | null;
-  setAnalysisResponse: (analysisResponse: AnalysisResponse | undefined) => void;
+  setAnalysisResponse: (analysisResponse: PressReleaseAnalysisResponse | undefined) => void;
 }
 
 export default function EditorToolbar({ editor, setAnalysisResponse }: EditorToolbarProps) {

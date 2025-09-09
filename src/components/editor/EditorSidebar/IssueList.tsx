@@ -2,13 +2,17 @@
 
 import type { Editor } from "@tiptap/react";
 import { jumpToPosition } from "@/lib/editor-utils";
-import type { AnalysisResponse, MediaHookEvaluation, ParagraphImprovement } from "@/types/editor";
+import type {
+  MediaHookEvaluation,
+  ParagraphImprovement,
+  PressReleaseAnalysisResponse,
+} from "@/types/api";
 import MediaHookEvaluationCard from "./MediaHookEvaluationCard";
 import ParagraphImprovementCard from "./ParagraphImprovementCard";
 
 interface IssueListProps {
   editor: Editor | null;
-  analysisResponse: AnalysisResponse | undefined;
+  analysisResponse: PressReleaseAnalysisResponse | undefined;
 }
 
 export default function IssueList({ editor, analysisResponse }: IssueListProps) {
@@ -29,14 +33,14 @@ export default function IssueList({ editor, analysisResponse }: IssueListProps) 
     <div className="flex max-h-[80vh] flex-col gap-4 overflow-y-auto p-4">
       {analysisResponse?.media_hook_evaluations?.map((mediaHookEvaluation) => (
         <MediaHookEvaluationCard
-          key={0}
+          key={mediaHookEvaluation.id}
           mediaHookEvaluation={mediaHookEvaluation}
           onClick={() => handleMHEClick(mediaHookEvaluation)}
         />
       ))}
       {analysisResponse?.paragraph_improvements?.map((paragraphImprovement) => (
         <ParagraphImprovementCard
-          key={0}
+          key={paragraphImprovement.paragraph_index}
           paragraphImprovement={paragraphImprovement}
           onClick={() => handlePIClick(paragraphImprovement)}
         />

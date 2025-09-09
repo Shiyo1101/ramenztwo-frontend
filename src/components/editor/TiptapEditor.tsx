@@ -4,13 +4,15 @@ import { EditorContent } from "@tiptap/react";
 import { useState } from "react";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { useTiptapEditor } from "@/hooks/useEditor";
-import type { AnalysisResponse } from "@/types/editor";
+import type { PressReleaseAnalysisResponse } from "@/types/api";
 import EditorSidebar from "./EditorSidebar";
 import EditorToolbar from "./EditorToolbar";
 
 export default function TiptapEditor() {
   const editor = useTiptapEditor();
-  const [analysisResponse, setAnalysisResponse] = useState<AnalysisResponse | undefined>();
+  const [analysisResponse, setAnalysisResponse] = useState<
+    PressReleaseAnalysisResponse | undefined
+  >();
 
   return (
     <div className="flex h-full w-full flex-col gap-4 overflow-x-auto print:overflow-visible print:bg-white print:p-0">

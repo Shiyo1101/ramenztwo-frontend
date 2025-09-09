@@ -5,7 +5,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { MediaHookEvaluation } from "@/types/editor";
+import type { MediaHookEvaluation } from "@/types/api";
 
 interface IssueCardProps {
   mediaHookEvaluation: MediaHookEvaluation;
@@ -13,21 +13,6 @@ interface IssueCardProps {
 }
 
 export default function MediaHookEvaluationCard({ mediaHookEvaluation, onClick }: IssueCardProps) {
-  //   const getIssueTypeColor = (type: string) => {
-  //     switch (type) {
-  //       case "誤字脱字":
-  //         return "destructive";
-  //       case "表記ゆれ":
-  //         return "secondary";
-  //       case "冗長表現":
-  //         return "outline";
-  //       case "文法":
-  //         return "default";
-  //       default:
-  //         return "default";
-  //     }
-  //   };
-
   return (
     <Card
       onClick={onClick}
@@ -42,9 +27,12 @@ export default function MediaHookEvaluationCard({ mediaHookEvaluation, onClick }
       <CardContent className="flex flex-col gap-2">
         <p>{mediaHookEvaluation.description}</p>
         <div className="flex flex-wrap gap-2">
-          {mediaHookEvaluation.improve_examples?.map((i) => (
-            <Badge key={0} className="max-w-full whitespace-normal break-words text-xs">
-              {i}
+          {mediaHookEvaluation.improve_examples?.map((improve_example, index) => (
+            <Badge
+              key={`${index}-${improve_example}`}
+              className="max-w-full whitespace-normal break-words text-xs"
+            >
+              {improve_example}
             </Badge>
           ))}
         </div>
