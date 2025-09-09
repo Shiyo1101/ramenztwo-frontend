@@ -15,9 +15,8 @@ export default function TiptapEditor() {
   >();
 
   return (
-    <div className="flex h-full w-full flex-col gap-4 overflow-x-auto print:overflow-visible print:bg-white print:p-0">
+    <div className="flex h-full w-full flex-col overflow-x-auto print:overflow-visible print:bg-white print:p-0">
       <EditorToolbar editor={editor} setAnalysisResponse={setAnalysisResponse} />
-
       <div className="bg-background">
         <ResizablePanelGroup direction="horizontal">
           <ResizablePanel

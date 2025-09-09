@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <div className="flex min-h-screen w-full flex-col gap-4 px-10 py-5">
+        <div className="flex min-h-screen w-full flex-col gap-4 px-10">
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />
