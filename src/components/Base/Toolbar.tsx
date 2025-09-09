@@ -4,11 +4,11 @@ import type { Editor } from "@tiptap/react";
 import { Check, Redo2, Undo2 } from "lucide-react";
 import MarkdownIt from "markdown-it";
 import { useState } from "react";
+import TurndownService from "turndown";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -84,9 +84,25 @@ export default function Toolbar({ editor }: ToolbarProps) {
     }
   };
 
+  const downloadFile = () => {
+    const html = editor.getHTML();
+    const turndownService = new TurndownService();
+    const markdown = turndownService.turndown(html);
+
+    const date = new Date().toISOString().split("T")[0];
+    const filename = `press-release-${date}.md`;
+
+    const blob = new Blob([markdown], { type: "text/markdown" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="flex h-12 w-full items-center gap-2 rounded border-b bg-secondary px-2">
-      <div></div>
       {/* ファイルを扱う */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -144,8 +160,19 @@ export default function Toolbar({ editor }: ToolbarProps) {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>ファイルをダウンロードする</DialogTitle>
-            <DialogDescription>ここにダウンロードボタンを挿入</DialogDescription>
           </DialogHeader>
+          <DialogFooter>
+            <Button
+              type="button"
+              className="mr-auto block"
+              onClick={() => {
+                downloadFile();
+                setIsUploadOpen(false);
+              }}
+            >
+              ダウンロード
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
 
