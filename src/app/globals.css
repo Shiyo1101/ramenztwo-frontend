@@ -130,8 +130,7 @@
     margin: 1.25rem 1rem 1.25rem 0.4rem;
   }
 
-  ul,
-  li {
+  ul li {
     list-style: disc;
 
     p {
@@ -140,8 +139,7 @@
     }
   }
 
-  ol,
-  li {
+  ol li {
     list-style: decimal;
 
     p {
@@ -149,4 +147,35 @@
       margin-bottom: 0.25rem;
     }
   }
+}
+
+.ProseMirror p {
+  font-size: 11px; /* 標準テキスト */
+}
+
+.ProseMirror h1 {
+  font-size: 26px; /* タイトル */
+  font-weight: bold;
+}
+
+.ProseMirror h2 {
+  font-size: 15px; /* サブタイトル */
+  font-style: italic;
+}
+
+.ProseMirror h3 {
+  font-size: 20px; /* 見出し 1 */
+  font-weight: bold;
+}
+
+.ProseMirror h4 {
+  font-size: 18px; /* 見出し 2 */
+}
+
+.ProseMirror h5 {
+  font-size: 16px; /* 見出し 3 */
+}
+
+.ProseMirror h6 {
+  font-size: 14px; /* 見出し 4 */
 }
