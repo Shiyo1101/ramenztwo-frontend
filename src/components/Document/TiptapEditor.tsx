@@ -42,34 +42,43 @@ const TiptapEditor = ({ initialContent }: TiptapEditorProps) => {
     immediatelyRender: false,
   });
 
+  const JumpToPosition = (from: number, to: number) => {
+    if (from > to) return;
+    // 選択範囲を設定
+    editor?.commands.setTextSelection({ from, to });
+
+    // エディタにフォーカスを当てる
+    editor?.commands.focus();
+  };
+
   // 指摘リスト（テストデータ）
   const issues = [
     {
       id: 1,
       type: "誤字脱字",
       message: "「サンプルテキスト」が「サンブルテキスト」と誤記されています。",
-      position: { line: 3, column: 15 },
+      position: { start: 3, end: 15 },
       suggestion: "サンプルテキスト",
     },
     {
       id: 2,
       type: "表記ゆれ",
       message: "「メール」と「Eメール」が混在しています。",
-      position: { line: 8, column: 5 },
+      position: { start: 20, end: 28 },
       suggestion: "どちらかに統一しましょう（例: メール）",
     },
     {
       id: 3,
       type: "冗長表現",
       message: "「まず最初に」は冗長です。",
-      position: { line: 12, column: 2 },
+      position: { start: 12, end: 30 },
       suggestion: "「最初に」",
     },
     {
       id: 4,
       type: "文法",
       message: "助詞の使い方が不自然です。「を」と「に」の混同。",
-      position: { line: 18, column: 7 },
+      position: { start: 18, end: 25 },
       suggestion: "「を」を「に」に修正",
     },
   ];
@@ -94,7 +103,7 @@ const TiptapEditor = ({ initialContent }: TiptapEditorProps) => {
           <ResizablePanel>
             <div className="flex max-h-[80vh] flex-col gap-4 overflow-y-auto p-4">
               {issues.map((i) => (
-                <Card key={i.id}>
+                <Card key={i.id} onClick={() => JumpToPosition(i.position.start, i.position.end)}>
                   <CardHeader>
                     <CardTitle>
                       {i.id}. {i.type}
@@ -104,8 +113,8 @@ const TiptapEditor = ({ initialContent }: TiptapEditorProps) => {
                     <p>{i.message}</p>
                   </CardContent>
                   <CardFooter className="flex gap-2">
-                    <p>{i.position.line}行目</p>
-                    <p>{i.position.line}文字目</p>
+                    <p>開始:{i.position.start}</p>
+                    <p>終了:{i.position.end}</p>
                   </CardFooter>
                 </Card>
               ))}
