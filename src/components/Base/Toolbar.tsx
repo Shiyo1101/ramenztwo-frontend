@@ -33,7 +33,8 @@ export default function Toolbar({ editor }: ToolbarProps) {
   const [isBullet, setIsBullet] = useState(editor?.isActive("bulletList"));
   const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
-  const [_title, setTitle] = useState("");
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState<string>("");
 
   if (!editor) return null;
 
@@ -77,14 +78,25 @@ export default function Toolbar({ editor }: ToolbarProps) {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       const markdown = await file.text();
+
       const md = new MarkdownIt({
         html: true,
         linkify: true,
         typographer: true,
       });
       const htmlContent = md.render(markdown);
-      editor.commands.setContent(htmlContent);
+
+      setContent(htmlContent);
     }
+  };
+
+  const submitHtml = () => {
+    // タイトルが入力されていれば先頭に追加
+    let newContent = "";
+    if (title.trim() !== "") {
+      newContent = `# ${title}\n\n${content}`;
+    }
+    editor.commands.setContent(newContent);
   };
 
   return (
@@ -135,6 +147,7 @@ export default function Toolbar({ editor }: ToolbarProps) {
               type="button"
               className="mr-auto block"
               onClick={() => {
+                submitHtml();
                 setIsUploadOpen(false);
               }}
             >

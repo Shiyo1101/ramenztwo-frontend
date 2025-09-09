@@ -37,7 +37,7 @@ const TiptapEditor = ({ initialContent }: TiptapEditorProps) => {
       Image,
       Markdown,
     ],
-    content: initialContent || "<p>Hello World! 🌎️</p>",
+    content: initialContent || "",
     immediatelyRender: false,
   });
 
