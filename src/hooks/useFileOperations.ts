@@ -62,6 +62,12 @@ export const useFileOperations = (editor: Editor | null) => {
     return convertHtmlToMarkdown(editor.getHTML());
   };
 
+  const getCurrentHtml = (): string => {
+    if (!editor) return "";
+
+    return editor.getHTML();
+  };
+
   return {
     state,
     openUploadDialog,
@@ -72,5 +78,6 @@ export const useFileOperations = (editor: Editor | null) => {
     confirmUpload,
     downloadFile,
     getCurrentMarkdown,
+    getCurrentHtml,
   };
 };

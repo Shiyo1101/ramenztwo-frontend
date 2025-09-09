@@ -22,7 +22,7 @@ interface AnalyzeButtonProps {
 
 export default function AnalyzeButton({ editor, setAnalysisResponse }: AnalyzeButtonProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const { getCurrentMarkdown } = useFileOperations(editor);
+  const { getCurrentHtml } = useFileOperations(editor);
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -38,7 +38,7 @@ export default function AnalyzeButton({ editor, setAnalysisResponse }: AnalyzeBu
         </DialogHeader>
         <AnalyzePressReleaseForm
           setIsAnalyzePressReleaseDialogOpen={setIsDialogOpen}
-          contentMarkdown={getCurrentMarkdown()}
+          contentMarkdown={getCurrentHtml()}
           setAnalysisResponse={setAnalysisResponse}
         />
       </DialogContent>
