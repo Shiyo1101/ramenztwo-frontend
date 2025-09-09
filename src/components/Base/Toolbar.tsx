@@ -75,7 +75,7 @@ export default function Toolbar({ editor }: ToolbarProps) {
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
+    if (e.target.files?.[0]) {
       const file = e.target.files[0];
       const markdown = await file.text();
 
@@ -100,11 +100,12 @@ export default function Toolbar({ editor }: ToolbarProps) {
   };
 
   return (
-    <div className="flex h-12 w-full items-center gap-2 rounded border-b bg-gray-100 px-2">
+    <div className="flex h-12 w-full items-center gap-2 rounded border-b bg-secondary px-2">
+      <div></div>
       {/* ファイルを扱う */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button type="button" className="rounded px-3 py-1 border hover:bg-gray-200">
+          <button type="button" className="rounded border px-3 py-1 hover:bg-gray-200">
             ファイル
           </button>
         </DropdownMenuTrigger>
@@ -112,14 +113,14 @@ export default function Toolbar({ editor }: ToolbarProps) {
         <DropdownMenuContent>
           <DropdownMenuItem
             onSelect={() => setIsUploadOpen(true)}
-            className="flex justify-between cursor-pointer"
+            className="flex cursor-pointer justify-between"
           >
             <span>開く</span>
           </DropdownMenuItem>
 
           <DropdownMenuItem
             onSelect={() => setIsDownloadOpen(true)}
-            className="flex justify-between cursor-pointer"
+            className="flex cursor-pointer justify-between"
           >
             <span>ダウンロード</span>
           </DropdownMenuItem>
@@ -229,7 +230,7 @@ export default function Toolbar({ editor }: ToolbarProps) {
       {/* 見出し */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button type="button" className="rounded px-3 py-1 border hover:bg-gray-200">
+          <button type="button" className="rounded border px-3 py-1 hover:bg-gray-200">
             {headingOptions.find((o) => o.value === getCurrentHeading())?.label ?? "標準テキスト"}
           </button>
         </DropdownMenuTrigger>
@@ -238,7 +239,7 @@ export default function Toolbar({ editor }: ToolbarProps) {
             <DropdownMenuItem
               key={o.value}
               onSelect={() => setHeading(o.value)}
-              className="flex justify-between cursor-pointer"
+              className="flex cursor-pointer justify-between"
             >
               <span style={{ fontSize: o.fontSize }}>{o.label}</span>
               {getCurrentHeading() === o.value && <Check className="h-4 w-4" />}

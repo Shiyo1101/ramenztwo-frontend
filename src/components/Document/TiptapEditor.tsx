@@ -44,7 +44,7 @@ const TiptapEditor = ({ initialContent }: TiptapEditorProps) => {
   return (
     <div className="flex size-full flex-col gap-4 overflow-x-auto print:overflow-visible print:bg-white print:p-0">
       <Toolbar editor={editor} />
-      <div className="bg-[#f9fbfd]">
+      <div className="bg-background">
         <div className="mx-auto w-[816px] min-w-max justify-center py-4 print:w-full print:min-w-0 print:py-0">
           <EditorContent editor={editor} />
         </div>
