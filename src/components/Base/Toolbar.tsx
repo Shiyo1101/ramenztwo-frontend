@@ -1,7 +1,7 @@
 "use client";
 
 import type { Editor } from "@tiptap/react";
-import { Check, Redo2, Undo2 } from "lucide-react";
+import { Check, FileSearch, Redo2, Undo2 } from "lucide-react";
 import MarkdownIt from "markdown-it";
 import { useEffect, useState } from "react";
 import TurndownService from "turndown";
@@ -12,6 +12,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   DropdownMenu,
@@ -22,6 +23,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Toggle } from "@/components/ui/toggle";
+import AnalyzePressReleaseForm from "../Document/AnalyzePressReleaseForm";
 
 type ToolbarProps = {
   editor: Editor | null;
@@ -34,6 +36,10 @@ export default function Toolbar({ editor }: ToolbarProps) {
   const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
   const [content, setContent] = useState<string>("");
+
+  const [isAnalyzePressReleaseDialogOpen, setIsAnalyzePressReleaseDialogOpen] = useState(false);
+
+  const turndownService = new TurndownService();
   const [currentHeading, setCurrentHeading] = useState<0 | 1 | 2 | 3 | 4 | 5 | 6>(0);
 
   // 見出しオプション
@@ -109,7 +115,6 @@ export default function Toolbar({ editor }: ToolbarProps) {
 
   const downloadFile = () => {
     const html = editor.getHTML();
-    const turndownService = new TurndownService();
     const markdown = turndownService.turndown(html);
 
     const date = new Date().toISOString().split("T")[0];
@@ -126,158 +131,180 @@ export default function Toolbar({ editor }: ToolbarProps) {
   };
 
   return (
-    <div className="flex h-12 w-full items-center gap-2 rounded border-b bg-secondary px-2">
-      {/* ファイルを扱う */}
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <button type="button" className="rounded border px-3 py-1 hover:bg-gray-200">
-            ファイル
-          </button>
-        </DropdownMenuTrigger>
+    <div className="flex h-12 w-full items-center justify-between rounded border-b bg-secondary px-2">
+      <div className="flex items-center gap-2">
+        {/* ファイルを扱う */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button type="button" className="rounded border px-3 py-1 hover:bg-gray-200">
+              ファイル
+            </button>
+          </DropdownMenuTrigger>
 
-        <DropdownMenuContent>
-          <DropdownMenuItem
-            onSelect={() => setIsUploadOpen(true)}
-            className="flex cursor-pointer justify-between"
-          >
-            <span>開く</span>
-          </DropdownMenuItem>
-
-          <DropdownMenuItem
-            onSelect={() => setIsDownloadOpen(true)}
-            className="flex cursor-pointer justify-between"
-          >
-            <span>ダウンロード</span>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-
-      {/* アップロードポップアップ */}
-      <Dialog open={isUploadOpen} onOpenChange={setIsUploadOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>ファイルをアップロードする</DialogTitle>
-            <div className="mt-4 flex flex-col gap-6">
-              <div>
-                <Label htmlFor="markdownfile">マークダウンファイル</Label>
-                <Input id="markdownfile" type="file" onChange={(e) => handleFileChange(e)} />
-              </div>
-            </div>
-          </DialogHeader>
-          <DialogFooter>
-            <Button
-              type="button"
-              className="mr-auto block"
-              onClick={() => {
-                editor.commands.setContent(content);
-                setIsUploadOpen(false);
-              }}
-            >
-              確定
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* ダウンロードポップアップ */}
-      <Dialog open={isDownloadOpen} onOpenChange={setIsDownloadOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>ファイルをダウンロードする</DialogTitle>
-          </DialogHeader>
-          <DialogFooter>
-            <Button
-              type="button"
-              className="mr-auto block"
-              onClick={() => {
-                downloadFile();
-              }}
-            >
-              ダウンロード
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* 取り消し */}
-      <button
-        type="button"
-        onClick={() => editor.chain().focus().undo().run()}
-        className="rounded px-2 py-1 hover:bg-gray-200"
-      >
-        <Undo2 size={16} />
-      </button>
-
-      {/* やり直し */}
-      <button
-        type="button"
-        onClick={() => editor.chain().focus().redo().run()}
-        className="rounded px-2 py-1 hover:bg-gray-200"
-      >
-        <Redo2 size={16} />
-      </button>
-
-      {/* 太字 */}
-      <Toggle
-        pressed={isBold}
-        onPressedChange={() => {
-          editor.chain().focus().toggleBold().run();
-          setIsBold(editor?.isActive("bold"));
-        }}
-        className="rounded px-2 py-1 font-bold hover:bg-gray-200 data-[state=on]:bg-gray-300"
-        aria-label="Bold"
-      >
-        B
-      </Toggle>
-
-      {/* 番号付きリスト */}
-      <Toggle
-        pressed={isOrdered}
-        onPressedChange={() => {
-          editor.chain().focus().toggleOrderedList().run();
-          setIsOrdered(editor?.isActive("orderedList"));
-          editor?.isActive("orderedList") && setIsBullet(false);
-        }}
-        className="rounded px-2 py-1 font-bold hover:bg-gray-200 data-[state=on]:bg-gray-300"
-        aria-label="Bold"
-      >
-        1.
-      </Toggle>
-
-      {/* 箇条書きリスト */}
-      <Toggle
-        pressed={isBullet}
-        onPressedChange={() => {
-          editor.chain().focus().toggleBulletList().run();
-          setIsBullet(editor?.isActive("bulletList"));
-          editor?.isActive("bulletList") && setIsOrdered(false);
-        }}
-        className="rounded px-2 py-1 font-bold hover:bg-gray-200 data-[state=on]:bg-gray-300"
-        aria-label="Bold"
-      >
-        •
-      </Toggle>
-
-      {/* 見出し */}
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <button type="button" className="rounded border px-3 py-1 hover:bg-gray-200">
-            {headingOptions.find((o) => o.value === currentHeading)?.label ?? "標準テキスト"}
-          </button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-[220px]">
-          {headingOptions.map((o) => (
+          <DropdownMenuContent>
             <DropdownMenuItem
-              key={o.value}
-              onSelect={() => setHeading(o.value)}
+              onSelect={() => setIsUploadOpen(true)}
               className="flex cursor-pointer justify-between"
             >
-              <span style={{ fontSize: o.fontSize }}>{o.label}</span>
-              {currentHeading === o.value && <Check className="h-4 w-4" />}
+              <span>開く</span>
             </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
+
+            <DropdownMenuItem
+              onSelect={() => setIsDownloadOpen(true)}
+              className="flex cursor-pointer justify-between"
+            >
+              <span>ダウンロード</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        {/* アップロードポップアップ */}
+        <Dialog open={isUploadOpen} onOpenChange={setIsUploadOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>ファイルをアップロードする</DialogTitle>
+              <div className="mt-4 flex flex-col gap-6">
+                <div>
+                  <Label htmlFor="markdownfile">マークダウンファイル</Label>
+                  <Input id="markdownfile" type="file" onChange={(e) => handleFileChange(e)} />
+                </div>
+              </div>
+            </DialogHeader>
+            <DialogFooter>
+              <Button
+                type="button"
+                className="mr-auto block"
+                onClick={() => {
+                  editor.commands.setContent(content);
+                  setIsUploadOpen(false);
+                }}
+              >
+                確定
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* ダウンロードポップアップ */}
+        <Dialog open={isDownloadOpen} onOpenChange={setIsDownloadOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>ファイルをダウンロードする</DialogTitle>
+            </DialogHeader>
+            <DialogFooter>
+              <Button
+                type="button"
+                className="mr-auto block"
+                onClick={() => {
+                  downloadFile();
+                }}
+              >
+                ダウンロード
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* 取り消し */}
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().undo().run()}
+          className="rounded px-2 py-1 hover:bg-gray-200"
+        >
+          <Undo2 size={16} />
+        </button>
+
+        {/* やり直し */}
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().redo().run()}
+          className="rounded px-2 py-1 hover:bg-gray-200"
+        >
+          <Redo2 size={16} />
+        </button>
+
+        {/* 太字 */}
+        <Toggle
+          pressed={isBold}
+          onPressedChange={() => {
+            editor.chain().focus().toggleBold().run();
+            setIsBold(editor?.isActive("bold"));
+          }}
+          className="rounded px-2 py-1 font-bold hover:bg-gray-200 data-[state=on]:bg-gray-300"
+          aria-label="Bold"
+        >
+          B
+        </Toggle>
+
+        {/* 番号付きリスト */}
+        <Toggle
+          pressed={isOrdered}
+          onPressedChange={() => {
+            editor.chain().focus().toggleOrderedList().run();
+            setIsOrdered(editor?.isActive("orderedList"));
+            editor?.isActive("orderedList") && setIsBullet(false);
+          }}
+          className="rounded px-2 py-1 font-bold hover:bg-gray-200 data-[state=on]:bg-gray-300"
+          aria-label="Bold"
+        >
+          1.
+        </Toggle>
+
+        {/* 箇条書きリスト */}
+        <Toggle
+          pressed={isBullet}
+          onPressedChange={() => {
+            editor.chain().focus().toggleBulletList().run();
+            setIsBullet(editor?.isActive("bulletList"));
+            editor?.isActive("bulletList") && setIsOrdered(false);
+          }}
+          className="rounded px-2 py-1 font-bold hover:bg-gray-200 data-[state=on]:bg-gray-300"
+          aria-label="Bold"
+        >
+          •
+        </Toggle>
+
+        {/* 見出し */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button type="button" className="rounded border px-3 py-1 hover:bg-gray-200">
+              {headingOptions.find((o) => o.value === currentHeading)?.label ?? "標準テキスト"}
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-[220px]">
+            {headingOptions.map((o) => (
+              <DropdownMenuItem
+                key={o.value}
+                onSelect={() => setHeading(o.value)}
+                className="flex cursor-pointer justify-between"
+              >
+                <span style={{ fontSize: o.fontSize }}>{o.label}</span>
+                {currentHeading === o.value && <Check className="h-4 w-4" />}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+      <Dialog
+        open={isAnalyzePressReleaseDialogOpen}
+        onOpenChange={setIsAnalyzePressReleaseDialogOpen}
+      >
+        <DialogTrigger asChild>
+          <Button className="w-20">
+            <FileSearch />
+            解析
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="w-[330px] sm:w-[550px]">
+          <DialogHeader>
+            <DialogTitle>解析設定</DialogTitle>
+          </DialogHeader>
+          <AnalyzePressReleaseForm
+            setIsAnalyzePressReleaseDialogOpen={setIsAnalyzePressReleaseDialogOpen}
+            contentMarkdown={turndownService.turndown(editor.getHTML())}
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

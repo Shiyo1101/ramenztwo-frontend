@@ -6,16 +6,11 @@ import ListItem from "@tiptap/extension-list-item";
 import OrderedList from "@tiptap/extension-ordered-list";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { Markdown } from "tiptap-markdown";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import Toolbar from "../Base/Toolbar";
 
-type TiptapEditorProps = {
-  initialContent?: string;
-};
-
-const TiptapEditor = ({ initialContent }: TiptapEditorProps) => {
+const TiptapEditor = () => {
   const editor = useEditor({
     editorProps: {
       attributes: {
@@ -36,9 +31,8 @@ const TiptapEditor = ({ initialContent }: TiptapEditorProps) => {
       OrderedList,
       ListItem,
       Image,
-      Markdown,
     ],
-    content: initialContent || "",
+    content: "",
     immediatelyRender: false,
   });
 

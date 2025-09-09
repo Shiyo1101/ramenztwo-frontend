@@ -138,9 +138,13 @@
     font-weight: 500;
   }
 
+  a:hover {
+    cursor: pointer;
+  }
+
   hr {
-    margin-top: 2rem;
-    margin-bottom: 2rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
   }
 }
 
@@ -154,30 +158,42 @@
 }
 
 .ProseMirror h1 {
-  font-size: 31px; /* タイトル */
+  font-size: 24px; /* タイトル */
   font-weight: bold;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .ProseMirror h2 {
   font-size: 20px; /* サブタイトル */
   font-style: italic;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
 }
 
 .ProseMirror h3 {
-  font-size: 25px; /* 見出し 1 */
+  font-size: 25px;
   font-weight: bold;
+  margin-top: 0.125rem;
+  margin-bottom: 0.125rem;
 }
 
 .ProseMirror h4 {
-  font-size: 23px; /* 見出し 2 */
+  font-size: 23px;
+  margin-top: 0.125rem;
+  margin-bottom: 0.125rem;
 }
 
 .ProseMirror h5 {
-  font-size: 21px; /* 見出し 3 */
+  font-size: 21px;
+  margin-top: 0.125rem;
+  margin-bottom: 0.125rem;
 }
 
 .ProseMirror h6 {
-  font-size: 19px; /* 見出し 4 */
+  font-size: 19px;
+  margin-top: 0.125rem;
+  margin-bottom: 0.125rem;
 }
 
 .underline-red {

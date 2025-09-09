@@ -1,6 +1,55 @@
 import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
 import { z } from "zod";
 
+const Company = z
+  .object({
+    company_id: z.number().int(),
+    company_name: z.string(),
+    president_name: z.union([z.string(), z.null()]).optional(),
+    address: z.union([z.string(), z.null()]).optional(),
+    phone: z.union([z.string(), z.null()]).optional(),
+    description: z.union([z.string(), z.null()]).optional(),
+    industry: z.union([z.string(), z.null()]).optional(),
+    ipo_type: z.union([z.string(), z.null()]).optional(),
+    capital: z.union([z.number(), z.null()]).optional(),
+    foundation_date: z.union([z.string(), z.null()]).optional(),
+    url: z.union([z.string(), z.null()]).optional(),
+    twitter_screen_name: z.union([z.string(), z.null()]).optional(),
+  })
+  .passthrough();
+const from_date = z.union([z.string(), z.null()]).optional();
+const PressRelease = z
+  .object({
+    company_name: z.string(),
+    company_id: z.number().int(),
+    release_id: z.number().int(),
+    title: z.string(),
+    subtitle: z.union([z.string(), z.null()]).optional(),
+    url: z.string(),
+    lead_paragraph: z.union([z.string(), z.null()]).optional(),
+    body: z.union([z.string(), z.null()]).optional(),
+    main_image: z.union([z.string(), z.null()]).optional(),
+    main_image_fastly: z.union([z.string(), z.null()]).optional(),
+    main_category_id: z.union([z.number(), z.null()]).optional(),
+    main_category_name: z.union([z.string(), z.null()]).optional(),
+    sub_category_id: z.union([z.number(), z.null()]).optional(),
+    sub_category_name: z.union([z.string(), z.null()]).optional(),
+    release_type: z.union([z.string(), z.null()]).optional(),
+    created_at: z.string(),
+    like: z.union([z.number(), z.null()]).optional(),
+  })
+  .passthrough();
+const ValidationError = z
+  .object({
+    loc: z.array(z.union([z.string(), z.number()])),
+    msg: z.string(),
+    type: z.string(),
+  })
+  .passthrough();
+const HTTPValidationError = z
+  .object({ detail: z.array(ValidationError) })
+  .partial()
+  .passthrough();
 const ImageData = z
   .object({
     url: z.union([z.string(), z.null()]),
@@ -10,16 +59,18 @@ const ImageData = z
   })
   .partial()
   .passthrough();
-
+const MetadataInput = z
+  .object({ persona: z.string().default("指定なし") })
+  .partial()
+  .passthrough();
 const PressReleaseInput = z
   .object({
     title: z.string().min(1).max(200),
     top_image: z.union([ImageData, z.null()]).optional(),
     content_markdown: z.string().min(1),
-    metadata: z.union([z.object({}).partial().passthrough(), z.null()]).optional(),
+    metadata: MetadataInput,
   })
   .passthrough();
-
 const MediaHookType = z.enum([
   "trending_seasonal",
   "unexpectedness",
@@ -31,7 +82,6 @@ const MediaHookType = z.enum([
   "superlative_rarity",
   "visual_impact",
 ]);
-
 const EvaluationScore = z.union([
   z.literal(1),
   z.literal(2),
@@ -39,7 +89,6 @@ const EvaluationScore = z.union([
   z.literal(4),
   z.literal(5),
 ]);
-
 const MediaHookEvaluation = z
   .object({
     hook_type: MediaHookType,
@@ -50,9 +99,7 @@ const MediaHookEvaluation = z
     current_elements: z.array(z.string()).optional(),
   })
   .passthrough();
-
 const ImprovementPriority = z.enum(["low", "medium", "high", "critical"]);
-
 const ParagraphImprovement = z
   .object({
     paragraph_index: z.number().int().gte(0),
@@ -63,7 +110,6 @@ const ParagraphImprovement = z
     applicable_hooks: z.array(MediaHookType).optional(),
   })
   .passthrough();
-
 const OverallAssessment = z
   .object({
     total_score: z.number().gte(0).lte(5),
@@ -73,7 +119,6 @@ const OverallAssessment = z
     estimated_impact: z.string(),
   })
   .passthrough();
-
 const PressReleaseAnalysisResponse = z
   .object({
     request_id: z.string(),
@@ -86,21 +131,14 @@ const PressReleaseAnalysisResponse = z
   })
   .passthrough();
 
-const ValidationError = z
-  .object({
-    loc: z.array(z.union([z.string(), z.number()])),
-    msg: z.string(),
-    type: z.string(),
-  })
-  .passthrough();
-
-const HTTPValidationError = z
-  .object({ detail: z.array(ValidationError) })
-  .partial()
-  .passthrough();
-
 export const schemas = {
+  Company,
+  from_date,
+  PressRelease,
+  ValidationError,
+  HTTPValidationError,
   ImageData,
+  MetadataInput,
   PressReleaseInput,
   MediaHookType,
   EvaluationScore,
@@ -109,8 +147,6 @@ export const schemas = {
   ParagraphImprovement,
   OverallAssessment,
   PressReleaseAnalysisResponse,
-  ValidationError,
-  HTTPValidationError,
 };
 
 const endpoints = makeApi([
@@ -118,7 +154,6 @@ const endpoints = makeApi([
     method: "post",
     path: "/analyze",
     alias: "analyze_press_release_analyze_post",
-    description: `プレスリリースをメディアフックの観点から分析し、評価と改善点を構造化JSONで返すエンドポイント`,
     requestFormat: "json",
     parameters: [
       {
@@ -128,6 +163,44 @@ const endpoints = makeApi([
       },
     ],
     response: PressReleaseAnalysisResponse,
+    errors: [
+      {
+        status: 422,
+        description: `Validation Error`,
+        schema: HTTPValidationError,
+      },
+    ],
+  },
+  {
+    method: "get",
+    path: "/companies",
+    alias: "get_companies_companies_get",
+    requestFormat: "json",
+    response: z.array(Company),
+  },
+  {
+    method: "get",
+    path: "/companies/:company_id/releases",
+    alias: "get_company_releases_companies__company_id__releases_get",
+    requestFormat: "json",
+    parameters: [
+      {
+        name: "company_id",
+        type: "Path",
+        schema: z.number().int(),
+      },
+      {
+        name: "from_date",
+        type: "Query",
+        schema: from_date,
+      },
+      {
+        name: "to_date",
+        type: "Query",
+        schema: from_date,
+      },
+    ],
+    response: z.array(PressRelease),
     errors: [
       {
         status: 422,
