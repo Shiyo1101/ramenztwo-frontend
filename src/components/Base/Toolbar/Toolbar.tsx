@@ -117,7 +117,7 @@ export default function Toolbar({ editor }: ToolbarProps) {
       {/* 見出し */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button type="button" className="rounded px-3 py-1 border hover:bg-gray-200">
+          <button type="button" className="rounded border px-3 py-1 hover:bg-gray-200">
             {headingOptions.find((o) => o.value === getCurrentHeading())?.label ?? "標準テキスト"}
           </button>
         </DropdownMenuTrigger>
@@ -126,7 +126,7 @@ export default function Toolbar({ editor }: ToolbarProps) {
             <DropdownMenuItem
               key={o.value}
               onClick={() => setHeading(o.value)}
-              className="flex justify-between cursor-pointer"
+              className="flex cursor-pointer justify-between"
             >
               <span style={{ fontSize: o.fontSize }}>{o.label}</span>
               {getCurrentHeading() === o.value && <Check className="h-4 w-4" />}

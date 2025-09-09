@@ -34,6 +34,26 @@ npm install
 npm run dev
 ```
 
+### 4. 環境変数の設定
+
+```bash
+cp ./.env.sample .env
+```
+
+コピー後、以下のように環境変数を設定してください。
+
+```bash
+API_URL="https://*******"
+```
+
+### 5. APIの型生成
+
+バックエンドサーバを起動し、以下のコマンドを実行します。
+
+```bash
+npm run codegen:dev
+```
+
 ## その他コマンド
 
 ### 1. リント(Linter)
