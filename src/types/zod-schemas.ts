@@ -51,12 +51,7 @@ const HTTPValidationError = z
   .partial()
   .passthrough();
 const ImageData = z
-  .object({
-    url: z.union([z.string(), z.null()]),
-    base64_data: z.union([z.string(), z.null()]),
-    mime_type: z.union([z.string(), z.null()]),
-    alt_text: z.union([z.string(), z.null()]),
-  })
+  .object({ url: z.union([z.string(), z.null()]) })
   .partial()
   .passthrough();
 const MetadataInput = z
