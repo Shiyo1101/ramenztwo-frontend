@@ -3,7 +3,7 @@
 import type { Editor } from "@tiptap/react";
 import { Check, Redo2, Undo2 } from "lucide-react";
 import MarkdownIt from "markdown-it";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TurndownService from "turndown";
 import { Button } from "@/components/ui/button";
 import {
@@ -34,8 +34,7 @@ export default function Toolbar({ editor }: ToolbarProps) {
   const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
   const [content, setContent] = useState<string>("");
-
-  if (!editor) return null;
+  const [currentHeading, setCurrentHeading] = useState<0 | 1 | 2 | 3 | 4 | 5 | 6>(0);
 
   // 見出しオプション
   const headingOptions: { label: string; value: 0 | 1 | 2 | 3 | 4 | 5 | 6; fontSize: string }[] = [
@@ -48,16 +47,35 @@ export default function Toolbar({ editor }: ToolbarProps) {
     { label: "見出し 4", value: 6, fontSize: "14px" },
   ];
 
-  // 現在のスタイルを取得
-  const getCurrentHeading = () => {
-    for (let level = 1; level <= 6; level++) {
-      if (editor.isActive("heading", { level })) {
-        console.log("Current heading level:", level);
-        return level;
+  useEffect(() => {
+    const getCurrentHeading = () => {
+      for (let level = 1; level <= 6; level++) {
+        if (editor?.isActive("heading", { level })) {
+          return level as 1 | 2 | 3 | 4 | 5 | 6;
+        }
       }
-    }
-    return 0; // 標準テキスト
-  };
+      return 0;
+    };
+
+    const updateHeading = () => {
+      const level = getCurrentHeading();
+      setCurrentHeading(level);
+    };
+
+    editor?.on("selectionUpdate", updateHeading);
+    editor?.on("transaction", updateHeading);
+
+    // 初期化時もチェック
+    updateHeading();
+
+    // クリーンアップ
+    return () => {
+      editor?.off("selectionUpdate", updateHeading);
+      editor?.off("transaction", updateHeading);
+    };
+  }, [editor]);
+
+  if (!editor) return null;
 
   // 見出しを設定
   const setHeading = (level: 0 | 1 | 2 | 3 | 4 | 5 | 6) => {
@@ -239,7 +257,7 @@ export default function Toolbar({ editor }: ToolbarProps) {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <button type="button" className="rounded border px-3 py-1 hover:bg-gray-200">
-            {headingOptions.find((o) => o.value === getCurrentHeading())?.label ?? "標準テキスト"}
+            {headingOptions.find((o) => o.value === currentHeading)?.label ?? "標準テキスト"}
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-[220px]">
@@ -250,7 +268,7 @@ export default function Toolbar({ editor }: ToolbarProps) {
               className="flex cursor-pointer justify-between"
             >
               <span style={{ fontSize: o.fontSize }}>{o.label}</span>
-              {getCurrentHeading() === o.value && <Check className="h-4 w-4" />}
+              {currentHeading === o.value && <Check className="h-4 w-4" />}
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>
