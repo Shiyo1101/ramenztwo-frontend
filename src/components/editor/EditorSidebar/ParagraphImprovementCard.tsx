@@ -1,3 +1,6 @@
+// To Do
+// paragraphImprovement.improvements.mapのkeyにidを入れる
+
 "use client";
 
 import { Badge } from "@/components/ui/badge";
@@ -35,7 +38,7 @@ export default function ParagraphImprovementCard({
     >
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-base">
-          {/* {paragraphImprovement.id} */}文章の改善案<span> 0</span>
+          文章の改善案<span> 0</span>
         </CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-2">
