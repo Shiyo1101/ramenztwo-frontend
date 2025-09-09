@@ -6,15 +6,10 @@ import ListItem from "@tiptap/extension-list-item";
 import OrderedList from "@tiptap/extension-ordered-list";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { Markdown } from "tiptap-markdown";
 
 import Toolbar from "../Base/Toolbar";
 
-type TiptapEditorProps = {
-  initialContent?: string;
-};
-
-const TiptapEditor = ({ initialContent }: TiptapEditorProps) => {
+const TiptapEditor = () => {
   const editor = useEditor({
     editorProps: {
       attributes: {
@@ -35,9 +30,8 @@ const TiptapEditor = ({ initialContent }: TiptapEditorProps) => {
       OrderedList,
       ListItem,
       Image,
-      Markdown,
     ],
-    content: initialContent || "",
+    content: "",
     immediatelyRender: false,
   });
 
