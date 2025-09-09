@@ -2,6 +2,7 @@
 
 import type { Editor } from "@tiptap/react";
 import { Check, Redo2, Undo2 } from "lucide-react";
+import MarkdownIt from "markdown-it";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -33,7 +34,6 @@ export default function Toolbar({ editor }: ToolbarProps) {
   const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
   const [_title, setTitle] = useState("");
-  const [_file, setFile] = useState<File | null>(null);
 
   if (!editor) return null;
 
@@ -75,8 +75,15 @@ export default function Toolbar({ editor }: ToolbarProps) {
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0]);
-      console.log(e.target.files[0]);
+      const file = e.target.files[0];
+      const markdown = await file.text();
+      const md = new MarkdownIt({
+        html: true,
+        linkify: true,
+        typographer: true,
+      });
+      const htmlContent = md.render(markdown);
+      editor.commands.setContent(htmlContent);
     }
   };
 
@@ -124,7 +131,13 @@ export default function Toolbar({ editor }: ToolbarProps) {
             </div>
           </DialogHeader>
           <DialogFooter>
-            <Button type="submit" className="mr-auto block">
+            <Button
+              type="button"
+              className="mr-auto block"
+              onClick={() => {
+                setIsUploadOpen(false);
+              }}
+            >
               確定
             </Button>
           </DialogFooter>
