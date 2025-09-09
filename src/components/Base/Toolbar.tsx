@@ -64,11 +64,6 @@ export default function Toolbar({ editor }: ToolbarProps) {
     };
 
     const updateHeading = () => {
-      if (editor) {
-        const { from, to } = editor.state.selection;
-        console.log("選択開始:", from, "選択終了:", to);
-      }
-
       const level = getCurrentHeading();
       setCurrentHeading(level);
     };

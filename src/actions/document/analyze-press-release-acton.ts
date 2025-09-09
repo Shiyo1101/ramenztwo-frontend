@@ -12,8 +12,6 @@ export async function analyzePressReleaseAction(value: z.infer<typeof schemas.Pr
   }
 
   try {
-    console.log(JSON.stringify(validatedFields.data));
-
     const apiUrl = process.env.API_URL || "http://127.0.0.1:8000";
     const response = await fetch(`${apiUrl}/analyze`, {
       method: "POST",
@@ -29,8 +27,6 @@ export async function analyzePressReleaseAction(value: z.infer<typeof schemas.Pr
     }
 
     const data: z.infer<typeof schemas.PressReleaseAnalysisResponse> = await response.json();
-
-    console.log("API Response Data:", data);
 
     return {
       data,
