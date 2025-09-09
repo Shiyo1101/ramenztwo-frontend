@@ -22,13 +22,13 @@ import { schemas } from "@/types/zod-schemas";
 
 type AnalyzePressReleaseFormProps = {
   setIsAnalyzePressReleaseDialogOpen: (value: boolean) => void;
-  contentMarkdown: string;
+  contentHtml: string;
   setAnalysisResponse: (analysisResponse: AnalysisResponse | undefined) => void;
 };
 
 export default function AnalyzePressReleaseForm({
   setIsAnalyzePressReleaseDialogOpen,
-  contentMarkdown,
+  contentHtml,
   setAnalysisResponse,
 }: AnalyzePressReleaseFormProps) {
   const [isPending, startTransition] = useTransition();
@@ -38,7 +38,7 @@ export default function AnalyzePressReleaseForm({
     defaultValues: {
       title: "",
       top_image: { url: "" },
-      content_markdown: contentMarkdown,
+      content_html: contentHtml,
       metadata: {
         persona: "",
       },

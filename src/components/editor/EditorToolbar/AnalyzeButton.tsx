@@ -38,7 +38,7 @@ export default function AnalyzeButton({ editor, setAnalysisResponse }: AnalyzeBu
         </DialogHeader>
         <AnalyzePressReleaseForm
           setIsAnalyzePressReleaseDialogOpen={setIsDialogOpen}
-          contentMarkdown={getCurrentHtml()}
+          contentHtml={getCurrentHtml()}
           setAnalysisResponse={setAnalysisResponse}
         />
       </DialogContent>

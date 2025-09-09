@@ -13,21 +13,6 @@ interface IssueCardProps {
 }
 
 export default function MediaHookEvaluationCard({ mediaHookEvaluation, onClick }: IssueCardProps) {
-  //   const getIssueTypeColor = (type: string) => {
-  //     switch (type) {
-  //       case "誤字脱字":
-  //         return "destructive";
-  //       case "表記ゆれ":
-  //         return "secondary";
-  //       case "冗長表現":
-  //         return "outline";
-  //       case "文法":
-  //         return "default";
-  //       default:
-  //         return "default";
-  //     }
-  //   };
-
   return (
     <Card
       onClick={onClick}
