@@ -16,9 +16,9 @@ export default function Header() {
         />
       </Link>
       <div>
-        <Link className="font-semibold hover:underline" href="/">
+        {/* <Link className="font-semibold hover:underline" href="/">
           ホーム
-        </Link>
+        </Link> */}
       </div>
     </header>
   );

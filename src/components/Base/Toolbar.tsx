@@ -33,7 +33,6 @@ export default function Toolbar({ editor }: ToolbarProps) {
   const [isBullet, setIsBullet] = useState(editor?.isActive("bulletList"));
   const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
-  const [title, setTitle] = useState("");
   const [content, setContent] = useState<string>("");
 
   if (!editor) return null;
@@ -69,11 +68,6 @@ export default function Toolbar({ editor }: ToolbarProps) {
     }
   };
 
-  const handleTitleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
-    console.log(e.target.value);
-  };
-
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) {
       const file = e.target.files[0];
@@ -88,15 +82,6 @@ export default function Toolbar({ editor }: ToolbarProps) {
 
       setContent(htmlContent);
     }
-  };
-
-  const submitHtml = () => {
-    // タイトルが入力されていれば先頭に追加
-    let newContent = "";
-    if (title.trim() !== "") {
-      newContent = `# ${title}\n\n${content}`;
-    }
-    editor.commands.setContent(newContent);
   };
 
   return (
@@ -134,10 +119,6 @@ export default function Toolbar({ editor }: ToolbarProps) {
             <DialogTitle>ファイルをアップロードする</DialogTitle>
             <div className="mt-4 flex flex-col gap-6">
               <div>
-                <Label htmlFor="title">タイトル名</Label>
-                <Input id="title" type="text" onChange={(e) => handleTitleChange(e)} />
-              </div>
-              <div>
                 <Label htmlFor="markdownfile">マークダウンファイル</Label>
                 <Input id="markdownfile" type="file" onChange={(e) => handleFileChange(e)} />
               </div>
@@ -148,7 +129,7 @@ export default function Toolbar({ editor }: ToolbarProps) {
               type="button"
               className="mr-auto block"
               onClick={() => {
-                submitHtml();
+                editor.commands.setContent(content);
                 setIsUploadOpen(false);
               }}
             >
