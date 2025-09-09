@@ -1,9 +1,9 @@
-import TiptapEditor from "@/components/Document/TiptapEditor";
+import TiptapEditor from "@/components/editor/TiptapEditor";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <main className="">
+    <div className="h-full">
       <TiptapEditor />
-    </main>
+    </div>
   );
 }

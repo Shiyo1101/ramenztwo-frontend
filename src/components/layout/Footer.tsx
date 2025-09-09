@@ -5,8 +5,8 @@ export default function Footer() {
 
   return (
     <footer className="mt-auto text-center">
-      <small>
-        &copy; <span id="year">{currentYear}</span> Press Polish
+      <small className="text-muted-foreground">
+        &copy; <span>{currentYear}</span> Press Polish
       </small>
     </footer>
   );

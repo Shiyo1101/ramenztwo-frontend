@@ -6,7 +6,8 @@ import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import type z from "zod";
-import { analyzePressReleaseAction } from "@/actions/document/analyze-press-release-acton";
+import { analyzePressReleaseAction } from "@/actions/analyze-press-release";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -15,19 +16,21 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import type { AnalysisResponse } from "@/types/editor";
 import { schemas } from "@/types/zod-schemas";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
 
 type AnalyzePressReleaseFormProps = {
   setIsAnalyzePressReleaseDialogOpen: (value: boolean) => void;
   contentMarkdown: string;
+  setAnalysisResponse: (analysisResponse: AnalysisResponse | undefined) => void;
 };
 
-const AnalyzePressReleaseForm = ({
+export default function AnalyzePressReleaseForm({
   setIsAnalyzePressReleaseDialogOpen,
   contentMarkdown,
-}: AnalyzePressReleaseFormProps) => {
+  setAnalysisResponse,
+}: AnalyzePressReleaseFormProps) {
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof schemas.PressReleaseInput>>({
@@ -45,8 +48,9 @@ const AnalyzePressReleaseForm = ({
   const onFormSubmit = (value: z.infer<typeof schemas.PressReleaseInput>) => {
     startTransition(() => {
       analyzePressReleaseAction(value).then((data) => {
-        if (data.success) {
+        if ("success" in data && data.success) {
           toast.success(data.success);
+          setAnalysisResponse(data);
         }
 
         if (data.error) {
@@ -71,7 +75,7 @@ const AnalyzePressReleaseForm = ({
                   <Input
                     {...field}
                     disabled={isPending}
-                    placeholder={"タイトルを入力してください"}
+                    placeholder="タイトルを入力してください"
                     type="text"
                   />
                 </FormControl>
@@ -90,7 +94,7 @@ const AnalyzePressReleaseForm = ({
                     {...field}
                     value={field.value ?? ""}
                     disabled={isPending}
-                    placeholder={"画像のURLを入力してください"}
+                    placeholder="画像のURLを入力してください"
                     type="text"
                   />
                 </FormControl>
@@ -108,7 +112,7 @@ const AnalyzePressReleaseForm = ({
                   <Input
                     {...field}
                     disabled={isPending}
-                    placeholder={"例: 20代女性、IT企業勤務、マーケティング担当"}
+                    placeholder="例: 20代女性、IT企業勤務、マーケティング担当"
                     type="text"
                   />
                 </FormControl>
@@ -117,12 +121,10 @@ const AnalyzePressReleaseForm = ({
           />
         </div>
         <Button type="submit" disabled={isPending || !form.formState.isDirty}>
-          {isPending && <Loader2Icon className="animate-spin" />}
+          {isPending && <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />}
           解析を実行
         </Button>
       </form>
     </Form>
   );
-};
-
-export default AnalyzePressReleaseForm;
+}
