@@ -66,11 +66,30 @@ const PressReleaseInput = z
     metadata: MetadataInput,
   })
   .passthrough();
+const MediaHookType = z.enum([
+  "trending_seasonal",
+  "unexpectedness",
+  "paradox_conflict",
+  "regional",
+  "topicality",
+  "social_public",
+  "novelty_uniqueness",
+  "superlative_rarity",
+  "visual_impact",
+]);
+const EvaluationScore = z.union([
+  z.literal(1),
+  z.literal(2),
+  z.literal(3),
+  z.literal(4),
+  z.literal(5),
+]);
 const MediaHookEvaluation = z
   .object({
-    hook_type: z.string(),
+    id: z.number().int(),
+    hook_type: MediaHookType,
     hook_name_ja: z.string(),
-    score: z.number().int(),
+    score: EvaluationScore,
     description: z.string(),
     improve_examples: z.union([z.array(z.string()), z.null()]).optional(),
     current_elements: z.union([z.array(z.string()), z.null()]).optional(),
@@ -116,6 +135,8 @@ export const schemas = {
   ImageData,
   MetadataInput,
   PressReleaseInput,
+  MediaHookType,
+  EvaluationScore,
   MediaHookEvaluation,
   ParagraphImprovement,
   OverallAssessment,

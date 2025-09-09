@@ -1,19 +1,15 @@
 "use client";
 
 import type { Editor } from "@tiptap/react";
-// import { Badge } from "@/components/ui/badge";
-import type { AnalysisResponse } from "@/types/editor";
+import type { PressReleaseAnalysisResponse } from "@/types/api";
 import IssueList from "./IssueList";
 
 interface EditorSidebarProps {
   editor: Editor | null;
-  analysisResponse: AnalysisResponse | undefined;
+  analysisResponse: PressReleaseAnalysisResponse | undefined;
 }
 
 export default function EditorSidebar({ editor, analysisResponse }: EditorSidebarProps) {
-  // const issueCount = analysisResponse?.length;
-  // const issueTypes = [...new Set(issues?.map((issue) => issue.type))];
-
   return (
     <div className="flex h-full flex-col">
       {/* ヘッダー */}

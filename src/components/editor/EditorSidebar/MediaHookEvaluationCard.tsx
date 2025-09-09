@@ -5,7 +5,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { MediaHookEvaluation } from "@/types/editor";
+import type { MediaHookEvaluation } from "@/types/api";
 
 interface IssueCardProps {
   mediaHookEvaluation: MediaHookEvaluation;
@@ -27,9 +27,12 @@ export default function MediaHookEvaluationCard({ mediaHookEvaluation, onClick }
       <CardContent className="flex flex-col gap-2">
         <p>{mediaHookEvaluation.description}</p>
         <div className="flex flex-wrap gap-2">
-          {mediaHookEvaluation.improve_examples?.map((i) => (
-            <Badge key={0} className="max-w-full whitespace-normal break-words text-xs">
-              {i}
+          {mediaHookEvaluation.improve_examples?.map((improve_example, index) => (
+            <Badge
+              key={`${index}-${improve_example}`}
+              className="max-w-full whitespace-normal break-words text-xs"
+            >
+              {improve_example}
             </Badge>
           ))}
         </div>

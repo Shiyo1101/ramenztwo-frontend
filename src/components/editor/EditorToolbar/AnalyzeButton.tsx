@@ -13,11 +13,11 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useFileOperations } from "@/hooks/useFileOperations";
-import type { AnalysisResponse } from "@/types/editor";
+import type { PressReleaseAnalysisResponse } from "@/types/api";
 
 interface AnalyzeButtonProps {
   editor: Editor | null;
-  setAnalysisResponse: (analysisResponse: AnalysisResponse | undefined) => void;
+  setAnalysisResponse: (analysisResponse: PressReleaseAnalysisResponse | undefined) => void;
 }
 
 export default function AnalyzeButton({ editor, setAnalysisResponse }: AnalyzeButtonProps) {

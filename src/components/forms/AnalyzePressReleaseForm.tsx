@@ -5,7 +5,6 @@ import { Loader2Icon } from "lucide-react";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import type z from "zod";
 import { analyzePressReleaseAction } from "@/actions/analyze-press-release";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,13 +16,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import type { AnalysisResponse } from "@/types/editor";
+import type { PressReleaseAnalysisResponse, PressReleaseInput } from "@/types/api";
 import { schemas } from "@/types/zod-schemas";
 
 type AnalyzePressReleaseFormProps = {
   setIsAnalyzePressReleaseDialogOpen: (value: boolean) => void;
   contentHtml: string;
-  setAnalysisResponse: (analysisResponse: AnalysisResponse | undefined) => void;
+  setAnalysisResponse: (analysisResponse: PressReleaseAnalysisResponse | undefined) => void;
 };
 
 export default function AnalyzePressReleaseForm({
@@ -33,7 +32,7 @@ export default function AnalyzePressReleaseForm({
 }: AnalyzePressReleaseFormProps) {
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<z.infer<typeof schemas.PressReleaseInput>>({
+  const form = useForm<PressReleaseInput>({
     resolver: zodResolver(schemas.PressReleaseInput),
     defaultValues: {
       title: "",
@@ -45,7 +44,7 @@ export default function AnalyzePressReleaseForm({
     },
   });
 
-  const onFormSubmit = (value: z.infer<typeof schemas.PressReleaseInput>) => {
+  const onFormSubmit = (value: PressReleaseInput) => {
     startTransition(() => {
       analyzePressReleaseAction(value).then((data) => {
         if ("success" in data && data.success) {
