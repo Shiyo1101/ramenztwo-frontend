@@ -34,10 +34,10 @@ const AnalyzePressReleaseForm = ({
     resolver: zodResolver(schemas.PressReleaseInput),
     defaultValues: {
       title: "",
-      top_image: {},
+      top_image: { url: "" },
       content_markdown: contentMarkdown,
       metadata: {
-        persona: undefined,
+        persona: "",
       },
     },
   });
@@ -81,28 +81,17 @@ const AnalyzePressReleaseForm = ({
           />
           <FormField
             control={form.control}
-            name="top_image"
+            name="top_image.url"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>トップ画像</FormLabel>
+                <FormLabel>トップ画像URL</FormLabel>
                 <FormControl>
                   <Input
-                    name={field.name}
-                    ref={field.ref}
+                    {...field}
+                    value={field.value ?? ""}
                     disabled={isPending}
-                    type="file"
-                    onBlur={field.onBlur}
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file && ["image/jpeg", "image/png", "image/jpg"].includes(file.type)) {
-                        field.onChange({ file });
-                      } else {
-                        field.onChange({});
-                        if (file) {
-                          toast.error("対応している画像形式は jpg, png, jpeg のみです。");
-                        }
-                      }
-                    }}
+                    placeholder={"画像のURLを入力してください"}
+                    type="text"
                   />
                 </FormControl>
                 <FormMessage />
