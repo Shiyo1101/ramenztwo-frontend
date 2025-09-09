@@ -37,7 +37,7 @@ export interface ParagraphImprovement {
   original_text: string;
   improved_text: string | null;
   improvements: string[];
-  priority: "high" | "medium" | "low";
+  priority: "high" | "medium" | "low" | "critical";
   applicable_hooks: string[];
 }
 

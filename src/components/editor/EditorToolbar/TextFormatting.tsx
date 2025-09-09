@@ -12,7 +12,6 @@ interface TextFormattingProps {
 
 export default function TextFormatting({ editor }: TextFormattingProps) {
   const { isBold, isOrdered, isBullet } = useEditorState(editor);
-
   if (!editor) return null;
 
   const handleBoldToggle = () => {
@@ -38,24 +37,12 @@ export default function TextFormatting({ editor }: TextFormattingProps) {
   return (
     <div className="flex items-center gap-1">
       {/* 取り消し */}
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={handleUndo}
-        disabled={!editor.can().undo()}
-        className="h-8 w-8 p-0"
-      >
+      <Button variant="ghost" size="sm" onClick={handleUndo} className="h-8 w-8 p-0 shadow-xs">
         <Undo2 className="h-4 w-4" />
       </Button>
 
       {/* やり直し */}
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={handleRedo}
-        disabled={!editor.can().redo()}
-        className="h-8 w-8 p-0"
-      >
+      <Button variant="ghost" size="sm" onClick={handleRedo} className="h-8 w-8 p-0 shadow-xs">
         <Redo2 className="h-4 w-4" />
       </Button>
 

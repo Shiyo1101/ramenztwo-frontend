@@ -48,9 +48,9 @@ export default function AnalyzePressReleaseForm({
   const onFormSubmit = (value: z.infer<typeof schemas.PressReleaseInput>) => {
     startTransition(() => {
       analyzePressReleaseAction(value).then((data) => {
-        if (data.success) {
+        if ("success" in data && data.success) {
           toast.success(data.success);
-          setAnalysisResponse(data.data);
+          setAnalysisResponse(data);
         }
 
         if (data.error) {
