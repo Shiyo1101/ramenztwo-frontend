@@ -99,6 +99,7 @@ export default function Toolbar({ editor }: ToolbarProps) {
     a.download = filename;
     a.click();
     URL.revokeObjectURL(url);
+    setIsDownloadOpen(false);
   };
 
   return (
@@ -167,7 +168,6 @@ export default function Toolbar({ editor }: ToolbarProps) {
               className="mr-auto block"
               onClick={() => {
                 downloadFile();
-                setIsUploadOpen(false);
               }}
             >
               ダウンロード
