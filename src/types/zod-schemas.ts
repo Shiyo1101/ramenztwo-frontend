@@ -62,47 +62,28 @@ const PressReleaseInput = z
   .object({
     title: z.string().min(1).max(200),
     top_image: z.union([ImageData, z.null()]).optional(),
-    content_markdown: z.string().min(1),
+    content_html: z.string().min(1),
     metadata: MetadataInput,
   })
   .passthrough();
-const MediaHookType = z.enum([
-  "trending_seasonal",
-  "unexpectedness",
-  "paradox_conflict",
-  "regional",
-  "topicality",
-  "social_public",
-  "novelty_uniqueness",
-  "superlative_rarity",
-  "visual_impact",
-]);
-const EvaluationScore = z.union([
-  z.literal(1),
-  z.literal(2),
-  z.literal(3),
-  z.literal(4),
-  z.literal(5),
-]);
 const MediaHookEvaluation = z
   .object({
-    hook_type: MediaHookType,
+    hook_type: z.string(),
     hook_name_ja: z.string(),
-    score: EvaluationScore,
+    score: z.number().int(),
     description: z.string(),
-    improve_examples: z.array(z.string()).optional(),
-    current_elements: z.array(z.string()).optional(),
+    improve_examples: z.union([z.array(z.string()), z.null()]).optional(),
+    current_elements: z.union([z.array(z.string()), z.null()]).optional(),
   })
   .passthrough();
-const ImprovementPriority = z.enum(["low", "medium", "high", "critical"]);
 const ParagraphImprovement = z
   .object({
     paragraph_index: z.number().int().gte(0),
     original_text: z.string(),
     improved_text: z.union([z.string(), z.null()]).optional(),
     improvements: z.array(z.string()).optional(),
-    priority: ImprovementPriority,
-    applicable_hooks: z.array(MediaHookType).optional(),
+    priority: z.string(),
+    applicable_hooks: z.array(z.string()).optional(),
   })
   .passthrough();
 const OverallAssessment = z
@@ -117,12 +98,12 @@ const OverallAssessment = z
 const PressReleaseAnalysisResponse = z
   .object({
     request_id: z.string(),
-    analyzed_at: z.string().datetime({ offset: true }).optional(),
+    analyzed_at: z.string(),
     media_hook_evaluations: z.array(MediaHookEvaluation).min(9).max(9),
     paragraph_improvements: z.array(ParagraphImprovement),
     overall_assessment: OverallAssessment,
-    processing_time_ms: z.union([z.number(), z.null()]).optional(),
-    ai_model_used: z.union([z.string(), z.null()]).optional(),
+    processing_time_ms: z.number().int().optional().default(0),
+    ai_model_used: z.string().optional().default(""),
   })
   .passthrough();
 
@@ -135,10 +116,7 @@ export const schemas = {
   ImageData,
   MetadataInput,
   PressReleaseInput,
-  MediaHookType,
-  EvaluationScore,
   MediaHookEvaluation,
-  ImprovementPriority,
   ParagraphImprovement,
   OverallAssessment,
   PressReleaseAnalysisResponse,
