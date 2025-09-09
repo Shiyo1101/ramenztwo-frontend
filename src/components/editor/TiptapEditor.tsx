@@ -1,18 +1,20 @@
 "use client";
 
 import { EditorContent } from "@tiptap/react";
+import { useState } from "react";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
-import { MOCK_ISSUES } from "@/constants/editor";
 import { useTiptapEditor } from "@/hooks/useEditor";
+import type { AnalysisResponse } from "@/types/editor";
 import EditorSidebar from "./EditorSidebar";
 import EditorToolbar from "./EditorToolbar";
 
 export default function TiptapEditor() {
   const editor = useTiptapEditor();
+  const [analysisResponse, setAnalysisResponse] = useState<AnalysisResponse | undefined>();
 
   return (
     <div className="flex h-full w-full flex-col gap-4 overflow-x-auto print:overflow-visible print:bg-white print:p-0">
-      <EditorToolbar editor={editor} />
+      <EditorToolbar editor={editor} setAnalysisResponse={setAnalysisResponse} />
 
       <div className="bg-background">
         <ResizablePanelGroup direction="horizontal">
@@ -26,9 +28,11 @@ export default function TiptapEditor() {
 
           <ResizableHandle withHandle />
 
-          <ResizablePanel defaultSize={30} minSize={25}>
-            <EditorSidebar editor={editor} issues={MOCK_ISSUES} />
-          </ResizablePanel>
+          {analysisResponse?.paragraph_improvements.length !== 0 && (
+            <ResizablePanel defaultSize={30} minSize={25}>
+              <EditorSidebar editor={editor} analysisResponse={analysisResponse} />
+            </ResizablePanel>
+          )}
         </ResizablePanelGroup>
       </div>
     </div>

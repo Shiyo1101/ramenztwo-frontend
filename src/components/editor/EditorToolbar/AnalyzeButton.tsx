@@ -13,12 +13,14 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useFileOperations } from "@/hooks/useFileOperations";
+import type { AnalysisResponse } from "@/types/editor";
 
 interface AnalyzeButtonProps {
   editor: Editor | null;
+  setAnalysisResponse: (analysisResponse: AnalysisResponse | undefined) => void;
 }
 
-export default function AnalyzeButton({ editor }: AnalyzeButtonProps) {
+export default function AnalyzeButton({ editor, setAnalysisResponse }: AnalyzeButtonProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { getCurrentMarkdown } = useFileOperations(editor);
 
@@ -37,6 +39,7 @@ export default function AnalyzeButton({ editor }: AnalyzeButtonProps) {
         <AnalyzePressReleaseForm
           setIsAnalyzePressReleaseDialogOpen={setIsDialogOpen}
           contentMarkdown={getCurrentMarkdown()}
+          setAnalysisResponse={setAnalysisResponse}
         />
       </DialogContent>
     </Dialog>

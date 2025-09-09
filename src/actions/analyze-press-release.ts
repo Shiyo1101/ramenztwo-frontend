@@ -28,6 +28,8 @@ export async function analyzePressReleaseAction(value: z.infer<typeof schemas.Pr
 
     const data: z.infer<typeof schemas.PressReleaseAnalysisResponse> = await response.json();
 
+    console.log(JSON.stringify(data, null, 2));
+
     return {
       data,
       success: "解析に成功しました",

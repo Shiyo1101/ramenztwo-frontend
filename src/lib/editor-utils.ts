@@ -22,8 +22,18 @@ export const setHeading = (editor: Editor | null, level: HeadingLevel) => {
   }
 };
 
-export const jumpToPosition = (editor: Editor | null, from: number, to: number) => {
-  if (!editor || from > to) return;
+export const jumpToPosition = (editor: Editor | null, originalText: string) => {
+  if (!editor) return;
+
+  const docText = editor.getText();
+  const from = docText.indexOf(originalText);
+
+  if (from === -1) {
+    console.warn(`"${originalText}" が見つかりませんでした`);
+    return;
+  }
+
+  const to = from + originalText.length;
 
   editor.commands.setTextSelection({ from, to });
   editor.commands.focus();

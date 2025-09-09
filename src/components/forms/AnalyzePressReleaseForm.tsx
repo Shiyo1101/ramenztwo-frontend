@@ -17,16 +17,19 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import type { AnalysisResponse } from "@/types/editor";
 import { schemas } from "@/types/zod-schemas";
 
 type AnalyzePressReleaseFormProps = {
   setIsAnalyzePressReleaseDialogOpen: (value: boolean) => void;
   contentMarkdown: string;
+  setAnalysisResponse: (analysisResponse: AnalysisResponse | undefined) => void;
 };
 
 export default function AnalyzePressReleaseForm({
   setIsAnalyzePressReleaseDialogOpen,
   contentMarkdown,
+  setAnalysisResponse,
 }: AnalyzePressReleaseFormProps) {
   const [isPending, startTransition] = useTransition();
 
@@ -47,6 +50,7 @@ export default function AnalyzePressReleaseForm({
       analyzePressReleaseAction(value).then((data) => {
         if (data.success) {
           toast.success(data.success);
+          setAnalysisResponse(data.data);
         }
 
         if (data.error) {
