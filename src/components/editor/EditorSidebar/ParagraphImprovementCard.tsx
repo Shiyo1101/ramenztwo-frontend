@@ -83,7 +83,7 @@ export default function ParagraphImprovementCard({
           )}
 
           {paragraphImprovement.improved_text && (
-            <div className="relative rounded-md border border-green-500/30 bg-green-50/50 p-3 dark:bg-green-950/20">
+            <div className="relative rounded-md border border-green-500/30 bg-green-50 p-3">
               <Badge
                 variant="default"
                 className="-top-2 absolute left-2 bg-green-600 text-white text-xs"
