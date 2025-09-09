@@ -97,7 +97,11 @@ const TiptapEditor = () => {
           <ResizablePanel>
             <div className="flex max-h-[80vh] flex-col gap-4 overflow-y-auto p-4">
               {issues.map((i) => (
-                <Card key={i.id} onClick={() => JumpToPosition(i.position.start, i.position.end)}>
+                <Card
+                  key={i.id}
+                  onClick={() => JumpToPosition(i.position.start, i.position.end)}
+                  className="cursor-pointer transition-transform duration-150 hover:bg-gray-100 active:scale-97"
+                >
                   <CardHeader>
                     <CardTitle>
                       {i.id}. {i.type}
