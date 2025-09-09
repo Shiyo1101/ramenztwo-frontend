@@ -46,13 +46,15 @@ cp ./.env.sample .env
 API_URL="https://*******"
 ```
 
-### 5. APIの型生成
+### 5. zodスキーマの生成
 
 バックエンドサーバを起動し、以下のコマンドを実行します。
 
 ```bash
-npm run codegen:dev
+npm run codegen:zod
 ```
+
+src/types/zod-schemas.tsにzodスキーマが生成されます
 
 ## その他コマンド
 
@@ -66,4 +68,12 @@ npm run lint
 
 ```bash
 npm run format
+```
+
+### 3. 安全でないフォーマット
+
+classNameのソートなど、安全でないフォーマットを実行します
+
+```bash
+npm run format:unsafe
 ```
