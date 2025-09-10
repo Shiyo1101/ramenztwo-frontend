@@ -58,12 +58,12 @@ export default function FileOperations({ editor }: FileOperationsProps) {
 
       {/* アップロードダイアログ */}
       <Dialog open={state.isUploadOpen} onOpenChange={closeUploadDialog}>
-        <DialogContent>
+        <DialogContent className="w-[330px] sm:w-[550px]">
           <DialogHeader>
             <DialogTitle>ファイルをアップロードする</DialogTitle>
           </DialogHeader>
           <div className="mt-4 flex flex-col gap-6">
-            <div>
+            <div className="flex flex-col gap-2">
               <Label htmlFor="markdownfile">マークダウンファイル</Label>
               <Input
                 id="markdownfile"
@@ -74,7 +74,12 @@ export default function FileOperations({ editor }: FileOperationsProps) {
             </div>
           </div>
           <DialogFooter>
-            <Button type="button" onClick={confirmUpload} disabled={!state.content}>
+            <Button
+              className="mr-auto block"
+              type="button"
+              onClick={confirmUpload}
+              disabled={!state.content}
+            >
               確定
             </Button>
           </DialogFooter>
