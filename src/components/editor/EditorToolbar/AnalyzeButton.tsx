@@ -27,7 +27,7 @@ export default function AnalyzeButton({ editor, setAnalysisResponse }: AnalyzeBu
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button size="sm" className="gap-2">
+        <Button size="sm" className="gap-2 font-bold">
           <FileSearch className="h-4 w-4" />
           解析
         </Button>

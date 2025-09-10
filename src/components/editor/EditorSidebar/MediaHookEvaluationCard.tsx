@@ -75,10 +75,14 @@ export default function MediaHookEvaluationCard({ mediaHookEvaluation, onClick }
         {mediaHookEvaluation.current_elements &&
           mediaHookEvaluation.current_elements.length > 0 && (
             <div className="flex flex-col gap-1">
-              <p className="font-medium text-muted-foreground text-xs">現在の要素:</p>
+              <p className="font-medium text-muted-foreground text-xs">評価ポイント:</p>
               <div className="flex flex-wrap gap-1">
                 {mediaHookEvaluation.current_elements.map((element, index) => (
-                  <Badge key={`${index}-${element}`} variant="outline" className="text-xs">
+                  <Badge
+                    key={`${index}-${element}`}
+                    variant="default"
+                    className="bg-green-50 text-muted-foreground text-xs"
+                  >
                     {element}
                   </Badge>
                 ))}

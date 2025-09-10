@@ -1,7 +1,15 @@
 "use client";
 
 import type { Editor } from "@tiptap/react";
+
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
+
 import { ScrollArea } from "@/components/ui/scroll-area";
 import type { PressReleaseAnalysisResponse } from "@/types/api";
 import IssueList from "./IssueList";
@@ -24,42 +32,50 @@ export default function EditorSidebar({ editor, analysisResponse }: EditorSideba
 
   return (
     <div className="flex h-full flex-col">
-      <div className="border-b bg-background p-4">
-        <div className="mb-2 flex items-center justify-between">
-          <h2 className="font-semibold text-lg">解析結果</h2>
-          <Badge variant="secondary">{totalIssueCount}件の提案</Badge>
-        </div>
-        {analysisResponse.overall_assessment && (
-          <div className="flex items-center gap-2">
-            <span className="text-muted-foreground text-sm">総合評価:</span>
-            <div className="flex items-center gap-1">
-              {[...Array(5)].map((_, i) => {
-                const key = `overall-assessment-star-${analysisResponse.overall_assessment.total_score}-${i}`;
-                return (
-                  <span
-                    key={key}
-                    className={`text-lg ${
-                      i < analysisResponse.overall_assessment.total_score
-                        ? "text-yellow-500"
-                        : "text-gray-300"
-                    }`}
-                  >
-                    ★
+      <div className="border-b p-4">
+        <Accordion type="single" defaultValue="item-1" collapsible>
+          <AccordionItem value="item-1">
+            <AccordionTrigger className="flex h-6 items-center justify-between">
+              <h2 className="font-semibold text-lg">解析結果</h2>
+              <Badge variant="secondary">{totalIssueCount}件の提案</Badge>
+            </AccordionTrigger>
+            <AccordionContent>
+              {analysisResponse.overall_assessment && (
+                <div className="flex items-center gap-2">
+                  <span className="text-muted-foreground text-sm">総合評価:</span>
+                  <div className="flex items-center gap-1">
+                    {[...Array(5)].map((_, i) => {
+                      const key = `overall-assessment-star-${analysisResponse.overall_assessment.total_score}-${i}`;
+                      return (
+                        <span
+                          key={key}
+                          className={`text-lg ${
+                            i < analysisResponse.overall_assessment.total_score
+                              ? "text-yellow-500"
+                              : "text-gray-300"
+                          }`}
+                        >
+                          ★
+                        </span>
+                      );
+                    })}
+                  </div>
+                  <span className="font-medium text-sm">
+                    {analysisResponse.overall_assessment.total_score.toFixed(1)}/5.0
                   </span>
-                );
-              })}
-            </div>
-            <span className="font-medium text-sm">
-              {analysisResponse.overall_assessment.total_score.toFixed(1)}/5.0
-            </span>
-          </div>
-        )}
-        <div className="mt-2 flex flex-wrap gap-2 text-muted-foreground text-xs">
-          <span>解析時間: {analysisResponse.processing_time_ms}ms</span>
-          {analysisResponse.ai_model_used && <span>モデル: {analysisResponse.ai_model_used}</span>}
-        </div>
+                </div>
+              )}
+              <div className="mt-2 flex flex-wrap gap-2 text-muted-foreground text-xs">
+                <span>解析時間: {analysisResponse.processing_time_ms}ms</span>
+                {analysisResponse.ai_model_used && (
+                  <span>モデル: {analysisResponse.ai_model_used}</span>
+                )}
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </div>
-      <ScrollArea className="h-full max-h-[80vh]">
+      <ScrollArea className="h-full max-h-[75vh]">
         {analysisResponse.overall_assessment && (
           <div className="border-b bg-muted/30 p-4">
             <OverallAssessmentCard assessment={analysisResponse.overall_assessment} />

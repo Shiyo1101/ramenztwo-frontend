@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertCircle, ArrowRight, CheckCircle2, Info } from "lucide-react";
+import { AlertCircle, ArrowDown, CheckCircle2, Info } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { ParagraphImprovement } from "@/types/api";
@@ -78,12 +78,12 @@ export default function ParagraphImprovementCard({
 
           {paragraphImprovement.improved_text && (
             <div className="flex justify-center">
-              <ArrowRight className="h-4 w-4 text-muted-foreground" />
+              <ArrowDown className="h-4 w-4 text-muted-foreground" />
             </div>
           )}
 
           {paragraphImprovement.improved_text && (
-            <div className="relative rounded-md border border-green-500/30 bg-green-50/50 p-3 dark:bg-green-950/20">
+            <div className="relative rounded-md border border-green-500/30 bg-green-50 p-3">
               <Badge
                 variant="default"
                 className="-top-2 absolute left-2 bg-green-600 text-white text-xs"

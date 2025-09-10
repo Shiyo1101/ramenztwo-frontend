@@ -17,7 +17,5 @@
     "source.fixAll.biome": "explicit"
   },
   "liveServer.settings.root": "/out",
-  "cSpell.words": [
-    "sabaejazz"
-  ]
+  "cSpell.words": ["sabaejazz"]
 }

@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function Header() {
   return (
-    <header className="flex w-full items-center justify-between">
+    <header className="flex w-full items-center justify-between p-4 shadow-md">
       <Link href="/" className="transition-opacity hover:opacity-80">
         <Image
           src="/app-logo/vector/black-logo.svg"
