@@ -1,8 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2Icon } from "lucide-react";
-import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { analyzePressReleaseAction } from "@/actions/analyze-press-release";
@@ -23,15 +21,17 @@ type AnalyzePressReleaseFormProps = {
   setIsAnalyzePressReleaseDialogOpen: (value: boolean) => void;
   contentHtml: string;
   setAnalysisResponse: (analysisResponse: PressReleaseAnalysisResponse | undefined) => void;
+  isPending: boolean;
+  startTransition: (callback: () => void) => void;
 };
 
 export default function AnalyzePressReleaseForm({
   setIsAnalyzePressReleaseDialogOpen,
   contentHtml,
   setAnalysisResponse,
+  isPending,
+  startTransition,
 }: AnalyzePressReleaseFormProps) {
-  const [isPending, startTransition] = useTransition();
-
   const form = useForm<PressReleaseInput>({
     resolver: zodResolver(schemas.PressReleaseInput),
     defaultValues: {
@@ -45,6 +45,8 @@ export default function AnalyzePressReleaseForm({
   });
 
   const onFormSubmit = (value: PressReleaseInput) => {
+    setIsAnalyzePressReleaseDialogOpen(false);
+
     startTransition(() => {
       analyzePressReleaseAction(value).then((data) => {
         if ("success" in data && data.success) {
@@ -55,7 +57,6 @@ export default function AnalyzePressReleaseForm({
         if (data.error) {
           toast.error(data.error);
         }
-        setIsAnalyzePressReleaseDialogOpen(false);
       });
     });
   };
@@ -69,13 +70,18 @@ export default function AnalyzePressReleaseForm({
             name="title"
             render={({ field }) => (
               <FormItem aria-required>
-                <FormLabel>タイトル</FormLabel>
+                <FormLabel className="flex items-center gap-1">
+                  タイトル
+                  <span className="text-[20px] text-red-500 leading-none">*</span>
+                </FormLabel>
+
                 <FormControl>
                   <Input
                     {...field}
                     disabled={isPending}
                     placeholder="タイトルを入力してください"
                     type="text"
+                    required
                   />
                 </FormControl>
                 <FormMessage />
@@ -120,7 +126,6 @@ export default function AnalyzePressReleaseForm({
           />
         </div>
         <Button type="submit" disabled={isPending || !form.formState.isDirty}>
-          {isPending && <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />}
           解析を実行
         </Button>
       </form>
